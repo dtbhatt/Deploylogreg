@@ -73,9 +73,11 @@ class UserManager(models.Manager):
                 errors.append("Already exists")
             
             if not errors:
-                mypassword = password.encode()
-                hashed = bcrypt.hashpw(mypassword,bcrypt.gensalt())
-                user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=hashed)
+                # myString=""
+                # mypassword = password.encode()
+                # hashed = bcrypt.hashpw(mypassword,bcrypt.gensalt())
+                # myString=hashed
+                user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=password)
                 return {"status": True, "data": user}
             else:
                 return {"status": False, "data": errors}     
