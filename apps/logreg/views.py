@@ -17,30 +17,37 @@ def success(request):
         return redirect('/')
 
 def login(request):
-    errors = User.objects.validlogin(request.POST)
-    if len(errors) == 0:
-        user = User.objects.get(email=request.POST["email"])
-        request.session["id"] = user.id
-
-        # set id in session
-        return redirect('/success')
-    
-    for error in errors:
-        messages.error(request, error) 
-
-    return redirect('/')
-
-def register(request):
-    res = User.objects.validregister(request.POST)
+    res = User.objects.validlogin(request.POST)
     if res["status"]:
-        request.session["firstName"] = request.POST["firstName"]
-        request.session["id"] = res["data"].id
         # set id in session
+        request.session["id"] = res["data"].id
         return redirect('/success')
     
     for error in res["data"]:
         messages.error(request, error) 
 
+    return redirect('/')
+    # errors = User.objects.validlogin(request.POST)
+    # if len(errors) == 0:
+    #     user = User.objects.get(email=request.POST["email"])
+    #     # set id in session
+    #     request.session["id"] = user.id
+    #     return redirect('/success')
+    
+    # for error in errors:
+    #     messages.error(request, error) 
+
+    # return redirect('/')
+
+def register(request):
+    res = User.objects.validregister(request.POST)
+    if res["status"]:
+        # set id in session
+        request.session["id"] = res["data"].id
+        return redirect('/success')
+    
+    for error in res["data"]:
+        messages.error(request, error) 
 
     return redirect('/')
 

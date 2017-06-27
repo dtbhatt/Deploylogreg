@@ -12,25 +12,17 @@ class UserManager(models.Manager):
             password = postData["password"]
             errors = []
 
-            # user_list = User.objects.filter(email=email)
+            user_list = User.objects.filter(email=email)        
 
-            # if not user_list 
-            #     errors.append("Invalid email and invalid password")
-            # elif user_list[0].password != password:
-            #     errors.append("Invalid password")
-            
-            
-            try:
-                user_list = User.objects.filter(email=email)              
-                if not user_list:
-                    errors.append("Invalid email or invalid password")
-                elif user_list[0].password != password:
-                    errors.append("Invalid password")
-
-            except: 
-                errors.append("Invalid email and invalid password!")
-
-            return errors
+            if not user_list: 
+                errors.append("Invalid email and invalid password")
+            else:
+                user = user_list[0]
+                if bcrypt.checkpw(password.encode(), user.password.encode()):
+                      return {"status": True, "data": user_list[0]}
+                else: 
+                    errors.append('wrong password')
+            return {"status": False, "data": errors}  
             
         def validregister(self, postData):
             firstName = postData["firstName"]
@@ -73,11 +65,9 @@ class UserManager(models.Manager):
                 errors.append("Already exists")
             
             if not errors:
-                # myString=""
-                # mypassword = password.encode()
-                # hashed = bcrypt.hashpw(mypassword,bcrypt.gensalt())
-                # myString=hashed
-                user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=password)
+                mypassword = password.encode()
+                hashed = bcrypt.hashpw(mypassword,bcrypt.gensalt())
+                user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=hashed)
                 return {"status": True, "data": user}
             else:
                 return {"status": False, "data": errors}     
