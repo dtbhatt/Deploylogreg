@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <a href="/logout">Logout</a>
+    <p>Welcome, {{user.name}}!</p>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -17,7 +19,37 @@
     </ul>
     {% endif %}
 
-    <p>Successfully registered or logged in, {{user.firstName}} !</p>
+    <p style="border:3px; border-style:solid; border-color:black; width: 400px; height: Autofit; padding: 1em;">
+        {% for user in users %} {{ user.alias }} poked you! <br>{% endfor %}
+
+        <!-- Need to implement a for loop { for user in users } { if currentuser == poked } {user.alias} poked you {pokers.all.count}. { endfor }-->
+    </p>
+    People you may want to poke:
+
+    <table border="1" style="width:75%">
+        <tr>
+            <th>Name</th>
+            <th>Alias</th>
+            <th>Email Address</th>
+            <th>Poke History</th>
+            <th>Action</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{user.name}}</td>
+            <td>{{user.alias}}</td>
+            <td>{{user.email}}</td>
+            <td>10 pokes</td>
+            <!-- In the above td, need to implement a count {pokers.all.count} method.
+            I've created a Poke class and PokeManager class in models
+            -->
+            <td><button>Poke</button></td>
+            <!-- Plus, implement a if statement to hide the current user from showing up on the 
+            table.  -->
+        </tr>
+        {% endfor %}
+    </table>
+
 </body>
 
 </html>

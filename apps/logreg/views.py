@@ -9,7 +9,8 @@ def index(request):
 def success(request):
     if "id" in request.session:
         context = {
-            "user":User.objects.get(id=request.session["id"])
+            "user":User.objects.get(id=request.session["id"]),
+            "users":User.objects.all()
         }
         return render(request, 'logreg/success.html', context)
     else:
@@ -27,17 +28,7 @@ def login(request):
         messages.error(request, error) 
 
     return redirect('/')
-    # errors = User.objects.validlogin(request.POST)
-    # if len(errors) == 0:
-    #     user = User.objects.get(email=request.POST["email"])
-    #     # set id in session
-    #     request.session["id"] = user.id
-    #     return redirect('/success')
-    
-    # for error in errors:
-    #     messages.error(request, error) 
 
-    # return redirect('/')
 
 def register(request):
     res = User.objects.validregister(request.POST)
@@ -51,5 +42,12 @@ def register(request):
 
     return redirect('/')
 
+def newpoke(request, id):
+    poke = Poke.objects.newpoke(id, request.session['id'])
+    return redirect('/success')
+
+def logout(request):
+    request.session.pop('id')
+    return redirect('/')
 
 # Create your views here.

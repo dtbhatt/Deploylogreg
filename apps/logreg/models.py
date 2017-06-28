@@ -25,22 +25,23 @@ class UserManager(models.Manager):
             return {"status": False, "data": errors}  
             
         def validregister(self, postData):
-            firstName = postData["firstName"]
-            lastName = postData["lastName"]
+            name = postData["name"]
+            alias = postData["alias"]
             email = postData['email']
             password = postData['password']
             confirmpass = postData['confirmpass']
+            birthdate = postData['birthdate']
     
             errors = []
 
-            if len(firstName) < 1:
+            if len(name) < 1:
                 errors.append("Name cannot be empty")
-            elif not firstName.isalpha():
+            elif not name.isalpha():
                 errors.append("Name can only contain leters")
             
-            if len(lastName) < 1:
+            if len(alias) < 1:
                 errors.append("Name cannot be empty")
-            elif not lastName.isalpha():
+            elif not alias.isalpha():
                 errors.append("Name can only contain leters")
             
             if len(email) < 1:
@@ -48,16 +49,19 @@ class UserManager(models.Manager):
             elif not EMAIL_REGEX.match(email):
                 errors.append("Email is not valid")
             
-            if len(password) < 1:
-                errors.append("Password cannot be empty")
+            if len(password) < 8:
+                errors.append("Password should be at least 8 characters")
             elif password != confirmpass:
                 errors.append("Password and Confirm password has to be same")
             
-            if len(confirmpass) < 1:
-                errors.append("Confirm password cannot be empty")
+            if len(confirmpass) < 8:
+                errors.append("Confirm password should be at least 8 characters")
             elif confirmpass != password:
                 errors.append("Password and Confirm password has to be same")
             
+            if not birthdate:
+                errors.append("Please input your birthdate")
+
             
             exist = User.objects.filter(email=email).exists()
 
@@ -67,16 +71,27 @@ class UserManager(models.Manager):
             if not errors:
                 mypassword = password.encode()
                 hashed = bcrypt.hashpw(mypassword,bcrypt.gensalt())
-                user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=hashed)
+                user = User.objects.create(name=name, alias=alias, email=email, password=hashed, birthdate=birthdate)
                 return {"status": True, "data": user}
             else:
-                return {"status": False, "data": errors}     
+                return {"status": False, "data": errors}
+
+# class PokeManager(models.Manager):
+#         def newpoke(self, UserId):
+#             user = User.objects.get(id=UserId)
+#             pokers.add(user)
+#             return self
 
 class User(models.Model):
-        firstName = models.CharField(max_length=45)
-        lastName = models.CharField(max_length=45)
+        name = models.CharField(max_length=45)
+        alias = models.CharField(max_length=45)
         email = models.CharField(max_length=200)
         password = models.CharField(max_length=100)
+        birthdate = models.DateField(blank=False, null=True)
         objects = UserManager()
+
+# class Poke(models.Model):
+#         pokers = models.ManyToManyField(User, related_name="allpokes")
+#         objects = PokeManager()
 
 # Create your models here.
