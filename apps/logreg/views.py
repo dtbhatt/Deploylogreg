@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import User
+from .models import User, Poke
 
 def index(request):
     return render(request, 'logreg/index.html')
@@ -10,7 +10,8 @@ def success(request):
     if "id" in request.session:
         context = {
             "user":User.objects.get(id=request.session["id"]),
-            "users":User.objects.all()
+            "users":User.objects.all(),
+            "pokes":Poke.objects.all()
         }
         return render(request, 'logreg/success.html', context)
     else:

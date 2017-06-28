@@ -39,11 +39,13 @@
             <td>{{user.name}}</td>
             <td>{{user.alias}}</td>
             <td>{{user.email}}</td>
-            <td>10 pokes</td>
+            <td>{{poke.pokers.all.count}}</td>
             <!-- In the above td, need to implement a count {pokers.all.count} method.
             I've created a Poke class and PokeManager class in models
             -->
-            <td><button>Poke</button></td>
+            <td>
+                <a href="poke/{{user.id}}">Poke</a>
+            </td>
             <!-- Plus, implement a if statement to hide the current user from showing up on the 
             table.  -->
         </tr>

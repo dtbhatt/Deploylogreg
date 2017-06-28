@@ -76,11 +76,11 @@ class UserManager(models.Manager):
             else:
                 return {"status": False, "data": errors}
 
-# class PokeManager(models.Manager):
-#         def newpoke(self, UserId):
-#             user = User.objects.get(id=UserId)
-#             pokers.add(user)
-#             return self
+class PokeManager(models.Manager):
+        def newpoke(self, UserId):
+            user = User.objects.get(id=UserId)
+            pokers.add(user)
+            return self
 
 class User(models.Model):
         name = models.CharField(max_length=45)
@@ -90,8 +90,8 @@ class User(models.Model):
         birthdate = models.DateField(blank=False, null=True)
         objects = UserManager()
 
-# class Poke(models.Model):
-#         pokers = models.ManyToManyField(User, related_name="allpokes")
-#         objects = PokeManager()
+class Poke(models.Model):
+        pokers = models.ManyToManyField(User, related_name="allpokes")
+        objects = PokeManager()
 
 # Create your models here.
