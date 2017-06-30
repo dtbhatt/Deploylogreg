@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="/logout">Logout</a>
+    <p>Welcome, {{selfie.alias}}!</p>
+    {% if friends %}
+    <p>Here is the list of your friends</p>
+    {%else%}
+    <p>You do not have any friend(s) yet! Sowwwiee... You're a loner! Haha </p>
+    {% endif %}
+
+    <table border="1" style="width:75%">
+        <tr>
+            <th>Alias</th>
+            <th>Action</th>
+        </tr>
+        {% for friend in friends %}
+        <tr>
+            <td>{{friend.alias}}</td>
+            <td><a href="/user/{{friend.id}}">View Profile</a> ||
+                <a href="/user/remove/{{friend.id}}">Remove as Friend</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+    </p>
+    Other Users not on your friend's list:
+
+    <table border="1" style="width:75%">
+        <tr>
+            <th>Alias</th>
+            <th>Action</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td><a href="/user/{{user.id}}">{{user.alias}}</a></td>
+            <td>
+                <form action='/user/add/{{user.id}}' method='POST'>
+                    {% csrf_token %}
+                    <input type='submit' value='Add as Friend'>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>
